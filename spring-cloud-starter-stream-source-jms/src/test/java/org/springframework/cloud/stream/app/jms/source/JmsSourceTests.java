@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2016-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,7 @@ import org.junit.runner.RunWith;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.cloud.stream.test.binder.MessageCollector;
 import org.springframework.integration.jms.JmsMessageDrivenEndpoint;
@@ -45,17 +43,17 @@ import org.springframework.jms.listener.DefaultMessageListenerContainer;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 import org.springframework.messaging.Message;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Tests for JmsSource.
  *
  * @author Gary Russell
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = JmsSourceTests.JmsSourceApplication.class)
+@RunWith(SpringRunner.class)
 @DirtiesContext
-@WebIntegrationTest(randomPort = true)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public abstract class JmsSourceTests {
 
 	@Autowired
@@ -70,13 +68,17 @@ public abstract class JmsSourceTests {
 	@Autowired
 	protected JmsMessageDrivenEndpoint endpoint;
 
-	@IntegrationTest({ "jms.sessionTransacted = false", "jms.clientId = client", "jms.destination = topic",
-						"jms.messageSelector = JMSCorrelationId=foo",
-						"jms.subscriptionDurable = false", "jms.subscriptionShared = false",
-						"spring.jms.listener.acknowledgeMode = DUPS_OK",
-						"spring.jms.listener.concurrency = 3",
-						"spring.jms.listener.maxConcurrency = 4",
-						"spring.jms.pubSubDomain = true" })
+	@TestPropertySource(properties = {
+		"jms.sessionTransacted = false",
+		"jms.clientId = client",
+		"jms.destination = topic",
+		"jms.messageSelector = JMSCorrelationId=foo",
+		"jms.subscriptionDurable = false", "jms.subscriptionShared = false",
+		"spring.jms.listener.acknowledgeMode = DUPS_OK",
+		"spring.jms.listener.concurrency = 3",
+		"spring.jms.listener.maxConcurrency = 4",
+		"spring.jms.pubSubDomain = true"
+	})
 	public static class PropertiesPopulated1Tests extends JmsSourceTests {
 
 		@Test
@@ -97,11 +99,13 @@ public abstract class JmsSourceTests {
 
 	}
 
-	@IntegrationTest({ "jms.sessionTransacted = true", "jms.clientId = client", "jms.destination = topic",
+	@TestPropertySource(properties = {
+			"jms.sessionTransacted = true", "jms.clientId = client", "jms.destination = topic",
 			"jms.subscriptionName = subName", "jms.subscriptionDurable = true",
 			"jms.subscriptionShared = false", "spring.jms.listener.acknowledgeMode = AUTO",
 			"spring.jms.listener.concurrency = 3",
-			"spring.jms.listener.maxConcurrency = 4" })
+			"spring.jms.listener.maxConcurrency = 4"
+	})
 	public static class PropertiesPopulated2Tests extends JmsSourceTests {
 
 		@Test
@@ -123,7 +127,8 @@ public abstract class JmsSourceTests {
 
 	}
 
-	@IntegrationTest({ "jms.sessionTransacted = true", "jms.destination = jmssource.test.queue",
+	@TestPropertySource(properties = {
+		"jms.sessionTransacted = true", "jms.destination = jmssource.test.queue",
 		"jms.messageSelector = JMSCorrelationId=foo",
 		"jms.subscriptionDurable = false", "jms.subscriptionShared = false",
 		"spring.jms.listener.acknowledgeMode = AUTO",

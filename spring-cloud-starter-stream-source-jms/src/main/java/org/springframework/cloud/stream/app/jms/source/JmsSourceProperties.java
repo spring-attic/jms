@@ -18,6 +18,7 @@ package org.springframework.cloud.stream.app.jms.source;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * Properties for the JMS Source.
@@ -26,6 +27,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  *
  */
 @ConfigurationProperties(prefix = "jms")
+@Validated
 public class JmsSourceProperties {
 
 	/**

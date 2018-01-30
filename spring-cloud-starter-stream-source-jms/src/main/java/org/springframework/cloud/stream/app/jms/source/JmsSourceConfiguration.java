@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors.
+ * Copyright 2016-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jms.JmsProperties;
 import org.springframework.boot.autoconfigure.jms.JmsProperties.Listener;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.cloud.stream.annotation.Bindings;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.messaging.Source;
 import org.springframework.context.annotation.Bean;
@@ -36,13 +35,13 @@ import org.springframework.jms.listener.SimpleMessageListenerContainer;
  * A source that receives messages from JMS.
  *
  * @author Gary Russell
+ * @author Chris Schaefer
  */
 @EnableBinding(Source.class)
 @EnableConfigurationProperties(JmsSourceProperties.class)
 public class JmsSourceConfiguration {
 
 	@Autowired
-	@Bindings(JmsSourceConfiguration.class)
 	private Source channels;
 
 	@Autowired

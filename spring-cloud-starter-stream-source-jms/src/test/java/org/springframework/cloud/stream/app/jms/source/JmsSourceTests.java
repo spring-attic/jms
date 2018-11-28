@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 the original author or authors.
+ * Copyright 2016-2018 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -50,6 +51,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * Tests for JmsSource.
  *
  * @author Gary Russell
+ * @author Artem Bilan
  */
 @RunWith(SpringRunner.class)
 @DirtiesContext
@@ -70,10 +72,10 @@ public abstract class JmsSourceTests {
 
 	@TestPropertySource(properties = {
 		"jms.sessionTransacted = false",
-		"jms.clientId = client",
 		"jms.destination = topic",
 		"jms.messageSelector = JMSCorrelationId=foo",
-		"jms.subscriptionDurable = false", "jms.subscriptionShared = false",
+		"jms.subscriptionDurable = false",
+			"jms.subscriptionShared = false",
 		"spring.jms.listener.acknowledgeMode = DUPS_OK",
 		"spring.jms.listener.concurrency = 3",
 		"spring.jms.listener.maxConcurrency = 4",
@@ -82,13 +84,13 @@ public abstract class JmsSourceTests {
 	public static class PropertiesPopulated1Tests extends JmsSourceTests {
 
 		@Test
-		public void test() throws Exception {
+		public void test() {
 			AbstractMessageListenerContainer container = TestUtils.getPropertyValue(this.endpoint, "listenerContainer",
 					AbstractMessageListenerContainer.class);
 			assertThat(container, instanceOf(SimpleMessageListenerContainer.class));
 			assertEquals(Session.DUPS_OK_ACKNOWLEDGE, TestUtils.getPropertyValue(container, "sessionAcknowledgeMode"));
 			assertFalse(TestUtils.getPropertyValue(container, "sessionTransacted", Boolean.class));
-			assertEquals("client", TestUtils.getPropertyValue(container, "clientId"));
+			assertNull(TestUtils.getPropertyValue(container, "clientId"));
 			assertEquals("topic", TestUtils.getPropertyValue(container, "destination"));
 			assertEquals("JMSCorrelationId=foo", TestUtils.getPropertyValue(container, "messageSelector"));
 			assertFalse(TestUtils.getPropertyValue(container, "subscriptionDurable", Boolean.class));
@@ -109,7 +111,7 @@ public abstract class JmsSourceTests {
 	public static class PropertiesPopulated2Tests extends JmsSourceTests {
 
 		@Test
-		public void test() throws Exception {
+		public void test() {
 			AbstractMessageListenerContainer container = TestUtils.getPropertyValue(this.endpoint, "listenerContainer",
 					AbstractMessageListenerContainer.class);
 			assertThat(container, instanceOf(DefaultMessageListenerContainer.class));

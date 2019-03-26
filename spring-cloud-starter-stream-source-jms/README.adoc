@@ -66,7 +66,7 @@ $$spring.jms.pub-sub-domain$$:: $$Whether the default destination type is topic.
 
 
 NOTE: Spring boot broker configuration is used; refer to the
-http://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-jms[Spring Boot Documentation] for more information.
+https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#boot-features-jms[Spring Boot Documentation] for more information.
 The `spring.jms.*` properties above are also handled by the boot JMS support.
 
 == Build

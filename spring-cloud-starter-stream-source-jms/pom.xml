@@ -53,6 +53,7 @@
 							<extraTestConfigClass>org.springframework.cloud.stream.app.test.jms.JmsSourceTestConfiguration.class</extraTestConfigClass>
 						</jms-source>
 					</generatedApps>
+					<enableContainerImageMetadata>true</enableContainerImageMetadata>
 				</configuration>
 			</plugin>
 		</plugins>
